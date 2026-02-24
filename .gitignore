@@ -1,0 +1,11 @@
+# Editor
+.idea
+.vscode/
+
+# Misc
+doc_*/
+.DS_Store
+
+# Sonar
+.sonar/
+.scannerwork/
