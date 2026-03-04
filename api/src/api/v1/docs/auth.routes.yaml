@@ -1,0 +1,32 @@
+/auth/google:
+  post:
+    summary: Authenticate user with Google
+    operationId: authenticateWithGoogle
+    tags:
+      - Auth
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - token
+            properties:
+              token:
+                type: string
+                description: Google ID token issued by client
+    responses:
+      200:
+        description: Authentication successful
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                user:
+                  type: object
+      401:
+        description: Invalid or expired Google token

@@ -1,6 +1,6 @@
 import app from "./app.js";
-import { env } from "./api/v1/config/env.js";
-import { connectDB } from "./api/v1/config/db.js";
+import { env } from "./config/env.js";
+import { connectDB } from "./config/db.js";
 
 await connectDB()
   .then(() => {

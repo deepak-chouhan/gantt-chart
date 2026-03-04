@@ -1,10 +1,10 @@
 export interface IUser {
-  _id: string;
-  googleId: string;
+  id: string;
+  google_Id: string;
   email: string;
   name: string;
   avatar?: string;
-  provider: "google";
+  provider?: "google";
   role: "USER" | "ADMIN";
   createdAt: Date;
   updatedAt: Date;

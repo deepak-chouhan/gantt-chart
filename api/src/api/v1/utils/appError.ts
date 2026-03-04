@@ -9,8 +9,8 @@ export const ErrorStatusMap: Record<ErrorCode, HttpStatus> = {
 };
 
 export default class AppError extends Error {
-  public readonly statusCode: number;
-  public readonly errorCode: String;
+  public readonly statusCode: HttpStatus;
+  public readonly errorCode: string;
   public readonly details?: unknown;
 
   constructor(

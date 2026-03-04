@@ -19,7 +19,7 @@ export const up = (pgm) => {
     name: { type: "varchar(255)", notNull: true },
     google_id: { type: "varchar(255)", notNull: true, unique: true },
     avatar_url: { type: "text" },
-    provider: { type: "varchar(255)", notNull: true },
+    provider: { type: "varchar(50)", notNull: true, default: "google" },
     created_at: {
       type: "timestamptz",
       notNull: true,
