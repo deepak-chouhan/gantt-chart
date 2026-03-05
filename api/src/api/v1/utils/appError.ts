@@ -11,12 +11,12 @@ export const ErrorStatusMap: Record<ErrorCode, HttpStatus> = {
 export default class AppError extends Error {
   public readonly statusCode: HttpStatus;
   public readonly errorCode: string;
-  public readonly details?: unknown;
+  public readonly details?: Record<string, unknown> | null;
 
   constructor(
     errorCode: ErrorCode,
     message: string,
-    details?: unknown,
+    details?: Record<string, unknown> | null,
     statusCode?: HttpStatus,
   ) {
     super(message);

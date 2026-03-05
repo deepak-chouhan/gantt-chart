@@ -6,6 +6,7 @@ const requiredVars = [
   "PORT",
   "GOOGLE_CLIENT_ID",
   "JWT_ACCESS_SECRET",
+  "JWT_REFRESH_SECRET",
   "DB_HOST",
   "DB_NAME",
   "DB_USER",
@@ -30,5 +31,8 @@ export const env = {
     user: String(process.env.DB_USER),
     password: String(process.env.DB_PASSWORD),
   },
-  jwtSecret: String(process.env.JWT_ACCESS_SECRET),
+  jwt: {
+    accessSecret: String(process.env.JWT_ACCESS_SECRET),
+    refreshSecret: String(process.env.JWT_REFRESH_SECRET)
+  }
 };

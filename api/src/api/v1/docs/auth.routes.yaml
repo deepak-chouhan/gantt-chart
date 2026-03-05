@@ -1,6 +1,6 @@
 /auth/google:
   post:
-    summary: Authenticate user with Google
+    summary: Authenticate user with Google and return access token and authetication cookie
     operationId: authenticateWithGoogle
     tags:
       - Auth
@@ -30,3 +30,36 @@
                   type: object
       401:
         description: Invalid or expired Google token
+/auth/refresh:
+  post:
+    summary: Refresh access token using refresh token cookie
+    operationId: refreshAccessToken
+    tags:
+      - Auth
+      - AccessToken
+    parameters:
+      - in: cookie
+        name: refreshToken
+        description: Refresh token stored in HTTP-only cookie
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: New access token generated successfully
+        headers:
+          Set-Cookie:
+            description: Sets a new refresh token cookie
+            schema:
+              type: string
+              example: refreshToken=NEW_REFRESH_TOKEN; HttpOnly; Secure; SameSite=Strict; Max-Age=25200000
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                accessToken:
+                  type: string
+                  description: New access token
+      401:
+        description: Invalid or expired refresh token
