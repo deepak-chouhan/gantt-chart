@@ -2,8 +2,8 @@ import express, { NextFunction, Request, Response } from "express";
 
 import healthRouter from "./routes/health.js";
 import V1Router from "./api/v1/index.js";
-import AppError from "./api/v1/utils/appError.js";
-import ApiResponse from "./api/v1/utils/apiResponse.js";
+import AppError from "./utils/appError.js";
+import ApiResponse from "./utils/apiResponse.js";
 
 import cookieParser from "cookie-parser";
 

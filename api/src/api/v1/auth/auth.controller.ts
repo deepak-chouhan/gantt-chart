@@ -9,9 +9,9 @@ import {
   generateRefreshToken,
   hashToken,
   verifyRefreshToken,
-} from "../utils/jwt.js";
-import ApiResponse from "../utils/apiResponse.js";
-import AppError from "../utils/appError.js";
+} from "../../../utils/jwt.js";
+import ApiResponse from "../../../utils/apiResponse.js";
+import AppError from "../../../utils/appError.js";
 
 export const googleAuth = async (
   req: Request,
@@ -198,4 +198,74 @@ export const logoutAuth = async (
   req: Request,
   res: Response,
   next: NextFunction,
-) => {};
+) => {
+  try {
+    const refreshToken = req.cookies.refreshToken;
+    if (refreshToken) {
+      try {
+        const payload = verifyRefreshToken(refreshToken);
+        if (!payload?.id) {
+          return next(
+            new AppError(ErrorCode.UNAUTHORIZED, "Invalid token payload"),
+          );
+        }
+
+        await pool.query("DELETE FROM refresh_tokens WHERE user_id = $1", [
+          payload.id,
+        ]);
+      } catch {
+        return next(
+          new AppError(ErrorCode.UNAUTHORIZED, "Token invalid or expired"),
+        );
+      }
+    } else {
+      return next(new AppError(ErrorCode.UNAUTHORIZED, "No refresh token"));
+    }
+
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: env.node_env === "production",
+      sameSite: "strict",
+    });
+
+    return res.status(HttpStatus.OK).json(
+      new ApiResponse({
+        statusCode: HttpStatus.OK,
+        message: "User successfully logged out",
+      }),
+    );
+  } catch {
+    return next(
+      new AppError(ErrorCode.INTERNAL_SERVER_ERROR, "Something went wrong"),
+    );
+  }
+};
+
+export const meAuth = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { rows } = await pool.query(
+      "SELECT id, email, name, avatar_url FROM users WHERE id = $1 LIMIT 1",
+      [req.user.id],
+    );
+
+    if (!rows[0]) {
+      return next(new AppError(ErrorCode.RESOURCE_NOT_FOUND, "User not found"));
+    }
+
+    return res.status(HttpStatus.OK).json(
+      new ApiResponse({
+        statusCode: HttpStatus.OK,
+        message: "User retrieved successfully.",
+        data: { user: rows[0] },
+      }),
+    );
+  } catch {
+    return next(
+      new AppError(ErrorCode.INTERNAL_SERVER_ERROR, "Something went wrong"),
+    );
+  }
+};

@@ -36,7 +36,6 @@
     operationId: refreshAccessToken
     tags:
       - Auth
-      - AccessToken
     parameters:
       - in: cookie
         name: refreshToken
@@ -63,3 +62,39 @@
                   description: New access token
       401:
         description: Invalid or expired refresh token
+/auth/logout:
+  post:
+    summary: Logout user by clearing cookies and refresh token
+    operationId: logoutUser
+    tags:
+      - Auth
+    parameters:
+      - in: cookie
+        name: refreshToken
+        description: Refresh token stored in HTTP-only cookie
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: Successfully logged out user
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: User successfully logged out
+      401:
+        description: Invalid or expired refresh token
+/auth/me:
+  get:
+    summary: Fetch user data using access token
+    operationId: getMe
+    tags:
+      - Auth
+    security:
+      type: https
+      schema: bearer
+      bearerFormat: JWT

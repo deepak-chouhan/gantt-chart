@@ -1,4 +1,4 @@
-import { ErrorCode, HttpStatus } from "../../../types/error.types.js";
+import { ErrorCode, HttpStatus } from "../types/error.types.js";
 
 export const ErrorStatusMap: Record<ErrorCode, HttpStatus> = {
   [ErrorCode.INVALID_INPUT]: HttpStatus.BAD_REQUEST,

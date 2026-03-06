@@ -1,6 +1,6 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { IUser } from "../../../types/user.types.js";
-import { env } from "../../../config/env.js";
+import { IUser } from "../types/user.types.js";
+import { env } from "../config/env.js";
 import { createHash } from "node:crypto";
 
 export const generateAccessToken = (user: IUser) => {
