@@ -22,12 +22,19 @@
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                token:
-                  type: string
-                user:
-                  type: object
+              allOf:
+                - $ref: '#/components/schemas/ApiSuccess'
+                - type: object
+                  properties:
+                    data:
+                      type: object
+                      properties:
+                        user:
+                          $ref: '#/components/schemas/User'
+                        accessToken:
+                          type: string
+                        refreshToken:
+                          type: string
       401:
         description: Invalid or expired Google token
 /auth/refresh:
@@ -55,11 +62,17 @@
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                accessToken:
-                  type: string
-                  description: New access token
+              allOf:
+                - $ref: '#/components/schemas/ApiSuccess'
+                - type: object
+                  properties:
+                    data:
+                      type: object
+                      properties:
+                        accessToken:
+                          type: string
+                        refreshToken:
+                          type: string
       401:
         description: Invalid or expired refresh token
 /auth/logout:
@@ -81,11 +94,9 @@
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                message:
-                  type: string
-                  example: User successfully logged out
+              allOf:
+                - $ref: '#/components/schemas/ApiSuccess'
+                - type: object
       401:
         description: Invalid or expired refresh token
 /auth/me:
@@ -95,6 +106,21 @@
     tags:
       - Auth
     security:
-      type: https
-      schema: bearer
-      bearerFormat: JWT
+      - bearerAuth: []
+    responses:
+      200:
+        description: User retrieved successfully
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/ApiSuccess'
+                - type: object
+                  properties:
+                    data:
+                      type: object
+                      properties:
+                        user:
+                          $ref: '#/components/schemas/User'
+      401:
+        description: Invalid token or unauthorized

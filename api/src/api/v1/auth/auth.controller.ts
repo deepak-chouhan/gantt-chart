@@ -126,7 +126,7 @@ export const refreshAuth = async (
 
     const hashedToken = hashToken(refreshToken);
     const storedTokens = await pool.query(
-      "SELECT expires_at FROM refresh_tokens WHERE id = $1 AND token_hash = $2",
+      "SELECT expires_at FROM refresh_tokens WHERE user_id = $1 AND token_hash = $2",
       [payload.id, hashedToken],
     );
 
