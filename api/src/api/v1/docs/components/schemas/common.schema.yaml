@@ -1,0 +1,34 @@
+ApiError:
+  type: object
+  properties:
+    success:
+      type: boolean
+      example: false
+    statusCode:
+      type: integer
+      example: 401
+    message:
+      type: string
+      example: "Unauthorized"
+    error:
+      type: object
+      properties:
+        code:
+          type: string
+          example: "UNAUTHORIZED"
+        message:
+          type: string
+        details:
+          nullable: true
+
+ApiSuccess:
+  type: object
+  properties:
+    success:
+      type: boolean
+      example: true
+    statusCode:
+      type: integer
+      example: 200
+    message:
+      type: string

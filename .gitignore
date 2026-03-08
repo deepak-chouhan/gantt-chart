@@ -16,6 +16,9 @@ node_modules/
 .env.local
 .env.*.local
 
+# Logs
+logs/
+
 # Misc
 doc_*/
 .DS_Store

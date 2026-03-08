@@ -1,0 +1,18 @@
+User:
+  type: object
+  properties:
+    id:
+      type: string
+      format: uuid
+      example: "550e8400-e29b-41d4-a716-446655440000"
+    email:
+      type: string
+      format: email
+      example: "deepak@example.com"
+    name:
+      type: string
+      example: "Deepak Chouhan"
+    avatar_url:
+      type: string
+      nullable: true
+      example: "https://lh3.googleusercontent.com/photo.jpg"
