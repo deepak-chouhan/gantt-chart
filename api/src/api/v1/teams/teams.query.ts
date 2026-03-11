@@ -32,3 +32,37 @@ export const createTeamQuery = async (name: string, ownerId: string) => {
     client.release();
   }
 };
+
+export const getTeamsByUserIdQuery = async (userId: string) => {
+  const { rows } = await pool.query(
+    `
+    SELECT t.id, t.name, t.owner_id, t.created_at
+    FROM teams t
+    INNER JOIN team_members tm ON tm.team_id = t.id
+    WHERE tm.user_id = $1
+    ORDER BY t.created_at DESC
+    `,
+    [userId],
+  );
+
+  return rows;
+};
+
+export const getTeamMembershipQuery = async (
+  teamId: string,
+  userId: string,
+) => {
+  const { rows } = await pool.query(
+    `
+    SELECT team_id, user_id, role, created_at
+    FOM team_member
+    WHERE team_id = $1 AND user_id = $2
+    LIMIT 1
+    `,
+    [teamId, userId],
+  );
+
+  return rows[0] || null;
+};
+
+export const getTeamWithMembersQuery = async () => {};

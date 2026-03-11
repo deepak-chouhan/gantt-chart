@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import AppError from "../../../utils/appError.js";
 import { ErrorCode, HttpStatus } from "../../../types/error.types.js";
-import { createTeam } from "./teams.service.js";
+import { createTeam, getMyTeams } from "./teams.service.js";
 import ApiResponse from "../../../utils/apiResponse.js";
 
 export const createTeamController = async (
@@ -13,9 +13,9 @@ export const createTeamController = async (
     const { name } = req.body;
     const team = await createTeam(name, req.user.id);
 
-    return res.status(HttpStatus.OK).json(
+    return res.status(HttpStatus.CREATED).json(
       new ApiResponse({
-        statusCode: HttpStatus.OK,
+        statusCode: HttpStatus.CREATED,
         message: "Team created successfully.",
         data: { team },
       }),
@@ -27,3 +27,21 @@ export const createTeamController = async (
     return next(new AppError(ErrorCode.INVALID_INPUT, "Something went wrong"));
   }
 };
+
+export const getMyTeamController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const teams = await getMyTeams(req.user.id);
+
+  return res.status(HttpStatus.OK).json(
+    new ApiResponse({
+      statusCode: HttpStatus.OK,
+      message: "Teams retrieved successfully",
+      data: { teams },
+    }),
+  );
+};
+
+
