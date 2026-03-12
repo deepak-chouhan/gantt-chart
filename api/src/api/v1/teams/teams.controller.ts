@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import AppError from "../../../utils/appError.js";
 import { ErrorCode, HttpStatus } from "../../../types/error.types.js";
-import { createTeam, getMyTeams } from "./teams.service.js";
+import { createTeam, getMyTeams, getTeamWithMembers } from "./teams.service.js";
 import ApiResponse from "../../../utils/apiResponse.js";
 
 export const createTeamController = async (
@@ -21,7 +21,7 @@ export const createTeamController = async (
       }),
     );
   } catch (error) {
-    if (error instanceof Error) {
+    if (error instanceof AppError) {
       return next(error);
     }
     return next(new AppError(ErrorCode.INVALID_INPUT, "Something went wrong"));
@@ -33,15 +33,48 @@ export const getMyTeamController = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const teams = await getMyTeams(req.user.id);
+  try {
+    const teams = await getMyTeams(req.user.id);
 
-  return res.status(HttpStatus.OK).json(
-    new ApiResponse({
-      statusCode: HttpStatus.OK,
-      message: "Teams retrieved successfully",
-      data: { teams },
-    }),
-  );
+    return res.status(HttpStatus.OK).json(
+      new ApiResponse({
+        statusCode: HttpStatus.OK,
+        message: "Teams retrieved successfully",
+        data: { teams },
+      }),
+    );
+  } catch (error) {
+    if (error instanceof AppError) {
+      return next(error);
+    }
+
+    next(new AppError(ErrorCode.INTERNAL_SERVER_ERROR, "Something went wrong"));
+  }
 };
 
+export const getTeamController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const team = await getTeamWithMembers(
+      req.params.teamId as string,
+      req.user.id,
+    );
 
+    return res.status(HttpStatus.OK).json(
+      new ApiResponse({
+        statusCode: HttpStatus,
+        message: "Team retrieved successfully",
+        data: { team },
+      }),
+    );
+  } catch (error) {
+    if (error instanceof AppError) {
+      return next(error);
+    }
+
+    next(new AppError(ErrorCode.INTERNAL_SERVER_ERROR, "Something went wrong"));
+  }
+};

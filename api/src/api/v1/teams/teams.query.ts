@@ -65,4 +65,28 @@ export const getTeamMembershipQuery = async (
   return rows[0] || null;
 };
 
-export const getTeamWithMembersQuery = async () => {};
+export const getTeamWithMembersQuery = async (teamId: string) => {
+  const { rows } = await pool.query(
+    `
+    SELECT t.id, t.name, t.owner_id, t.created_at,
+    json_agg(
+      json_build_object(
+        "userId", u.id,
+        "name", u.name,
+        "email", u.email,
+        "avatarUrl", u.avatar_url,
+        "role", tm.role,
+        "joinedAt", tm.created_at
+      )
+    ) as members
+    FROM teams t
+    INNER JOIN team_members tm ON t.team_id = t.id
+    INNER JOIN users u on u.id = tm.user_id
+    WHERE t.id = $1
+    GROUP BY t.id
+    `,
+    [teamId],
+  );
+
+  return rows[0] || null;
+};
