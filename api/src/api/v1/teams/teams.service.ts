@@ -64,14 +64,14 @@ export const deleteTeam = async (teamId: string, userId: string) => {
   if (!membership) {
     throw new AppError(
       ErrorCode.FORBIDDEN_ACCESS,
-      "You are not a member of this team",
+      "You are not a admin of this team",
     );
   }
 
-  if (membership.role != "owner") {
+  if (membership.role != "ADMIN") {
     throw new AppError(
       ErrorCode.FORBIDDEN_ACCESS,
-      "Only the owner can update the team",
+      "Only the admin can delete the team",
     );
   }
 
