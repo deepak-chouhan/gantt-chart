@@ -22,8 +22,8 @@ GET /teams/:teamId                      # Gets team with teamIdd along with memb
 PATCH /teams/:teamId                    # Updates team with teamId
 DELETE /team/:teamId                    # Deletes team with teamId and membership
 
-POST /teams/:teamId/members             
-DELETE /team/:teamId/members/:userId
+POST /teams/:teamId/members             # Add a user's membership in team
+DELETE /team/:teamId/members/:userId    # Remove a user's membership from team
 ```
 
 ### PROJECT Route

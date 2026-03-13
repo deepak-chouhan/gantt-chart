@@ -90,3 +90,15 @@ export const getTeamWithMembersQuery = async (teamId: string) => {
 
   return rows[0] || null;
 };
+
+export const updateTeamQuery = async (teamId: string, name: string) => {
+  const { rows } = await pool.query(
+    `
+    UPDATE teams SET name = $1
+    WHERE id = $2
+    `,
+    [name, teamId],
+  );
+
+  return rows[0];
+};

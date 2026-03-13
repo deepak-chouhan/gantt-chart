@@ -5,6 +5,7 @@ import {
   getTeamMembershipQuery,
   getTeamsByUserIdQuery,
   getTeamWithMembersQuery,
+  updateTeamQuery,
 } from "./teams.query.js";
 
 export const createTeam = async (name: string, userId: string) => {
@@ -30,4 +31,28 @@ export const getTeamWithMembers = async (teamId: string, userId: string) => {
   }
 
   return team;
+};
+
+export const updateTeam = async (
+  teamId: string,
+  userId: string,
+  name: string,
+) => {
+  const membership = await getTeamMembershipQuery(teamId, userId);
+
+  if (!membership) {
+    throw new AppError(
+      ErrorCode.FORBIDDEN_ACCESS,
+      "You are not a member of this team",
+    );
+  }
+
+  if (membership.role != "owner") {
+    throw new AppError(
+      ErrorCode.FORBIDDEN_ACCESS,
+      "Only the owner can update the team",
+    );
+  }
+
+  return await updateTeamQuery(teamId, name);
 };

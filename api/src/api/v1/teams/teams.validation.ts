@@ -11,6 +11,18 @@ const createTeamSchema = z.object({
     .trim(),
 });
 
+const updateTeamSchema = z.object({
+  name: z
+    .string()
+    .min(1, "Team name is required")
+    .max(255, "Team name cannot exceed 255 characters")
+    .trim(),
+});
+
+const teamIdParamSchema = z.object({
+  teamId: z.uuid("Invalid team ID"),
+});
+
 const validate = (schema: z.ZodSchema, source: "body" | "params" = "body") => {
   return (req: Request, res: Response, next: NextFunction) => {
     const result = schema.safeParse(source === "body" ? req.body : req.params);
@@ -37,3 +49,5 @@ const validate = (schema: z.ZodSchema, source: "body" | "params" = "body") => {
 };
 
 export const validateCreateTeam = validate(createTeamSchema);
+export const validateUpdateTeam = validate(updateTeamSchema);
+export const validateTeamIdParam = validate(teamIdParamSchema);
