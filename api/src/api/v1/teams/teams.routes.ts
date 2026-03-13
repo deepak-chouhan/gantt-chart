@@ -25,5 +25,6 @@ router.patch(
   validateUpdateTeam,
   updateTeamController,
 );
+router.delete("/:teamId", validateTeamIdParam);
 
 export default router;

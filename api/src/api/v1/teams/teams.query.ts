@@ -102,3 +102,7 @@ export const updateTeamQuery = async (teamId: string, name: string) => {
 
   return rows[0];
 };
+
+export const deleteTeamQuery = async (teamId: string) => {
+  await pool.query("DELETE FROM teams WHERE id = $1", [teamId]);
+};

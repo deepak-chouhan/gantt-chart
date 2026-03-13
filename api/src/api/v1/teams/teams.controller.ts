@@ -3,6 +3,7 @@ import AppError from "../../../utils/appError.js";
 import { ErrorCode, HttpStatus } from "../../../types/error.types.js";
 import {
   createTeam,
+  deleteTeam,
   getMyTeams,
   getTeamWithMembers,
   updateTeam,
@@ -53,7 +54,9 @@ export const getMyTeamController = async (
       return next(error);
     }
 
-    next(new AppError(ErrorCode.INTERNAL_SERVER_ERROR, "Something went wrong"));
+    return next(
+      new AppError(ErrorCode.INTERNAL_SERVER_ERROR, "Something went wrong"),
+    );
   }
 };
 
@@ -80,7 +83,9 @@ export const getTeamController = async (
       return next(error);
     }
 
-    next(new AppError(ErrorCode.INTERNAL_SERVER_ERROR, "Something went wrong"));
+    return next(
+      new AppError(ErrorCode.INTERNAL_SERVER_ERROR, "Something went wrong"),
+    );
   }
 };
 
@@ -110,6 +115,33 @@ export const updateTeamController = async (
       return next(error);
     }
 
-    next(new AppError(ErrorCode.INTERNAL_SERVER_ERROR, "Something went wrong"));
+    return next(
+      new AppError(ErrorCode.INTERNAL_SERVER_ERROR, "Something went wrong"),
+    );
+  }
+};
+
+export const deleteTeamController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    await deleteTeam(req.params.teamId as string, req.user.id);
+
+    return res.status(HttpStatus.OK).json(
+      new ApiResponse({
+        statusCode: HttpStatus.OK,
+        message: "Team deleted successfully",
+      }),
+    );
+  } catch (error) {
+    if (error instanceof AppError) {
+      return next(error);
+    }
+
+    return next(
+      new AppError(ErrorCode.INTERNAL_SERVER_ERROR, "Something went wrong"),
+    );
   }
 };

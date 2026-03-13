@@ -2,6 +2,7 @@ import { ErrorCode } from "../../../types/error.types.js";
 import AppError from "../../../utils/appError.js";
 import {
   createTeamQuery,
+  deleteTeamQuery,
   getTeamMembershipQuery,
   getTeamsByUserIdQuery,
   getTeamWithMembersQuery,
@@ -55,4 +56,24 @@ export const updateTeam = async (
   }
 
   return await updateTeamQuery(teamId, name);
+};
+
+export const deleteTeam = async (teamId: string, userId: string) => {
+  const membership = await getTeamMembershipQuery(teamId, userId);
+
+  if (!membership) {
+    throw new AppError(
+      ErrorCode.FORBIDDEN_ACCESS,
+      "You are not a member of this team",
+    );
+  }
+
+  if (membership.role != "owner") {
+    throw new AppError(
+      ErrorCode.FORBIDDEN_ACCESS,
+      "Only the owner can update the team",
+    );
+  }
+
+  await deleteTeamQuery(teamId);
 };
