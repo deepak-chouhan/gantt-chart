@@ -1,0 +1,67 @@
+/teams:
+  post:
+    summary: Create a team and return team info
+    operationId: createTeam
+    tags:
+      - Teams
+    security:
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - name
+            properties:
+              name:
+                type: string
+                description: Team Name
+    responses:
+      201:
+        description: Team successfully created
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#ref/components/schemas/ApiSuccess"
+                - type: object
+                  properties:
+                    data:
+                      type: object
+                      properties:
+                        team:
+                          type: object
+      400:
+        description: Invalid request or input
+      401:
+        description: Invalid token or unauthorized
+      500:
+        description: Internal server error
+  get:
+    summary: Get all team having user's membership
+    operationId: getMyTeams
+    tags:
+      - Teams
+    security:
+      - bearerAuth: []
+    responses:
+      200:
+        description:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/ApiSuccess"
+                - type: object
+                  properties:
+                    data:
+                      type: object
+                      properties:
+                        teams:
+                          type: array
+      401:
+        description: Invalid token or unauthorized
+      500:
+        description: Internal server error

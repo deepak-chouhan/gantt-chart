@@ -20,7 +20,16 @@ const updateTeamSchema = z.object({
 });
 
 const teamIdParamSchema = z.object({
-  teamId: z.uuid("Invalid team ID"),
+  teamId: z.uuid("Invalid team ID").trim(),
+});
+
+const inviteMemberSchema = z.object({
+  email: z.email("Invalid email address").trim().toLowerCase(),
+});
+
+export const memberParamSchema = z.object({
+  teamId: z.uuid("Invalid team Id").trim(),
+  userId: z.uuid("Invalid user Id").trim(),
 });
 
 const validate = (schema: z.ZodSchema, source: "body" | "params" = "body") => {
@@ -50,4 +59,6 @@ const validate = (schema: z.ZodSchema, source: "body" | "params" = "body") => {
 
 export const validateCreateTeam = validate(createTeamSchema);
 export const validateUpdateTeam = validate(updateTeamSchema);
-export const validateTeamIdParam = validate(teamIdParamSchema);
+export const validateInviteMember = validate(inviteMemberSchema);
+export const validateTeamIdParam = validate(teamIdParamSchema, "params");
+export const validateMemberParam = validate(memberParamSchema, "params");

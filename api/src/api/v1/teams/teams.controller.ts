@@ -30,7 +30,7 @@ export const createTeamController = async (
     if (error instanceof AppError) {
       return next(error);
     }
-    return next(new AppError(ErrorCode.INVALID_INPUT, "Something went wrong"));
+    return next(new AppError(ErrorCode.INTERNAL_SERVER_ERROR, "Something went wrong"));
   }
 };
 
@@ -145,3 +145,33 @@ export const deleteTeamController = async (
     );
   }
 };
+
+export const inviteMemberController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    // send email invite
+  } catch (error) {
+    if (error instanceof AppError) {
+      return next(error);
+    }
+
+    return next(
+      new AppError(ErrorCode.INTERNAL_SERVER_ERROR, "Something went wrong"),
+    );
+  }
+};
+
+export const removeMemberController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {};
+
+export const leaveTeamController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {};

@@ -11,6 +11,9 @@ const requiredVars = [
   "DB_NAME",
   "DB_USER",
   "DB_PASSWORD",
+  "RESEND_API_KEY",
+  "INVITE_BASE_URL",
+  "INVITE_EMAIL",
 ];
 
 requiredVars.forEach((key) => {
@@ -33,6 +36,11 @@ export const env = {
   },
   jwt: {
     accessSecret: String(process.env.JWT_ACCESS_SECRET),
-    refreshSecret: String(process.env.JWT_REFRESH_SECRET)
-  }
+    refreshSecret: String(process.env.JWT_REFRESH_SECRET),
+  },
+  invite: {
+    resendApiKey: String(process.env.RESEND_API_KEY),
+    baseUrl: String(process.env.INVITE_BASE_URL),
+    email: String(process.env.INVITE_EMAIL),
+  },
 };

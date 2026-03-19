@@ -106,3 +106,26 @@ export const updateTeamQuery = async (teamId: string, name: string) => {
 export const deleteTeamQuery = async (teamId: string) => {
   await pool.query("DELETE FROM teams WHERE id = $1", [teamId]);
 };
+
+export const addMemberQuery = async (teamId: string, userId: string) => {
+  const { rows } = await pool.query(
+    `
+    INSERT INTO team_members (team_id, user_id, role)
+    VALUES ($1, $2, 'MEMBER')
+    RETURNING team_id, user_id, role, created_at
+    `,
+    [teamId, userId],
+  );
+
+  return rows[0];
+};
+
+export const removeMemberQuery = async (teamId: string, userId: string) => {
+  await pool.query(
+    `
+    DELETE FROM team_members
+    WHERE team_id = $1 AND user_id = $2
+    `,
+    [teamId, userId],
+  );
+};
