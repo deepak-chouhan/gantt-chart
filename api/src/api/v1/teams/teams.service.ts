@@ -147,7 +147,7 @@ export const removeMember = async (
   const targetMembership = await getTeamMembershipQuery(teamId, targetUserId);
   if (!targetMembership) {
     throw new AppError(
-      ErrorCode.RESOURCE_NOT_FOUND,
+      ErrorCode.FORBIDDEN_ACCESS,
       "User is not a member of this team",
     );
   }

@@ -30,7 +30,9 @@ export const createTeamController = async (
     if (error instanceof AppError) {
       return next(error);
     }
-    return next(new AppError(ErrorCode.INTERNAL_SERVER_ERROR, "Something went wrong"));
+    return next(
+      new AppError(ErrorCode.INTERNAL_SERVER_ERROR, "Something went wrong"),
+    );
   }
 };
 
