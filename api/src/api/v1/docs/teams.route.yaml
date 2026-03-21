@@ -166,4 +166,88 @@
         description: Invalid token or unauthorized
       500:
         description: Internal server error
-    
+/teams/{teamId}/members:
+  post:
+    summary: Invite a member to team
+    operationId: inviteToTeam
+    tags:
+      - Teams
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: teamId
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: Member invited successfully
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/ApiSuccess"
+      400:
+        description: Invalid member email
+      401:
+        description: Invalid token or unauthorized
+      500:
+        description: Internal server error
+/teams/{teamId}/members/{userId}:
+  delete:
+    summary: Remove a member from team
+    operationId: removeFromTeam
+    tags:
+      - Teams
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: teamId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: Team deleted successfully
+        content:
+          application/json:
+            schema:
+              allOf:
+                  - $ref: "#/components/schemas/ApiSuccess"
+      401:
+        description: Invalid token or unauthorized
+      500:
+        description: Internal server error
+/teams/{teamId}/members/me:
+  delete:
+    summary: Member leaves a team
+    operationId: removeMeFromTeam
+    tags:
+      - Teams
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: teamId
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: Team deleted successfully
+        content:
+          application/json:
+            schema:
+              allOf:
+                  - $ref: "#/components/schemas/ApiSuccess"
+      401:
+        description: Invalid token or unauthorized
+      500:
+        description: Internal server error

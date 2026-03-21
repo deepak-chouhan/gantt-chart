@@ -6,6 +6,7 @@ import {
   deleteTeam,
   getMyTeams,
   getTeamWithMembers,
+  inviteMember,
   updateTeam,
 } from "./teams.service.js";
 import ApiResponse from "../../../utils/apiResponse.js";
@@ -154,7 +155,18 @@ export const inviteMemberController = async (
   next: NextFunction,
 ) => {
   try {
-    // send email invite
+    await inviteMember(
+      req.params.teamId as string,
+      req.body.email,
+      req.user.id,
+    );
+
+    return res.status(HttpStatus.OK).json(
+      new ApiResponse({
+        statusCode: HttpStatus.OK,
+        message: "User added successfully",
+      }),
+    );
   } catch (error) {
     if (error instanceof AppError) {
       return next(error);

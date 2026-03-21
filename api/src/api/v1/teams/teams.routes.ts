@@ -33,7 +33,7 @@ router.patch(
 router.delete("/:teamId", validateTeamIdParam);
 
 router.delete(
-  "/:teamId/members/leave",
+  "/:teamId/members/me",
   validateTeamIdParam,
   leaveTeamController,
 );
@@ -44,7 +44,7 @@ router.post(
   inviteMemberController,
 );
 router.delete(
-  "/teamId/members/:userId",
+  "/:teamId/members/:userId",
   validateMemberParam,
   removeMemberController,
 );

@@ -10,6 +10,8 @@ import {
   removeMemberQuery,
   updateTeamQuery,
 } from "./teams.query.js";
+import { pool } from "../../../config/db.js";
+import { IUser } from "../../../types/user.types.js";
 
 export const createTeam = async (name: string, userId: string) => {
   return await createTeamQuery(name, userId);
@@ -82,7 +84,7 @@ export const deleteTeam = async (teamId: string, userId: string) => {
 
 export const inviteMember = async (
   teamId: string,
-  targetUserId: string,
+  targetUserEmail: string,
   requestorUserId: string,
 ) => {
   const requestorMembership = await getTeamMembershipQuery(
@@ -102,9 +104,25 @@ export const inviteMember = async (
     );
   }
 
+  const { rows } = await pool.query(
+    `SELECT id FROM users WHERE email = $1 LIMIT 1`,
+    [targetUserEmail],
+  );
+
+  const invitedUser = rows[0] as IUser | undefined;
+  if (!invitedUser) {
+    throw new AppError(
+      ErrorCode.RESOURCE_NOT_FOUND,
+      "No user found with that email",
+    );
+  }
+
   // TODO: Send Email Invite (Later Plans)
 
-  const existingMembership = await getTeamMembershipQuery(teamId, targetUserId);
+  const existingMembership = await getTeamMembershipQuery(
+    teamId,
+    invitedUser.id,
+  );
   if (existingMembership) {
     throw new AppError(
       ErrorCode.INVALID_INPUT,
@@ -112,7 +130,7 @@ export const inviteMember = async (
     );
   }
 
-  return await addMemberQuery(teamId, targetUserId);
+  return await addMemberQuery(teamId, invitedUser.id);
 };
 
 export const removeMember = async (
