@@ -55,7 +55,7 @@ export const getTeamMembershipQuery = async (
   const { rows } = await pool.query(
     `
     SELECT team_id, user_id, role, created_at
-    FOM team_member
+    FROM team_members
     WHERE team_id = $1 AND user_id = $2
     LIMIT 1
     `,
@@ -71,19 +71,19 @@ export const getTeamWithMembersQuery = async (teamId: string) => {
     SELECT t.id, t.name, t.owner_id, t.created_at,
     json_agg(
       json_build_object(
-        "userId", u.id,
-        "name", u.name,
-        "email", u.email,
-        "avatarUrl", u.avatar_url,
-        "role", tm.role,
-        "joinedAt", tm.created_at
+        'userId', u.id,
+        'name', u.name,
+        'email', u.email,
+        'avatarUrl', u.avatar_url,
+        'role', tm.role,
+        'joinedAt', tm.created_at
       )
-    ) as members
+    ) AS members
     FROM teams t
-    INNER JOIN team_members tm ON t.team_id = t.id
+    INNER JOIN team_members tm ON tm.team_id = t.id
     INNER JOIN users u on u.id = tm.user_id
     WHERE t.id = $1
-    GROUP BY t.id
+    GROUP BY t.id, t.name, t.owner_id, t.created_at
     `,
     [teamId],
   );
@@ -96,6 +96,7 @@ export const updateTeamQuery = async (teamId: string, name: string) => {
     `
     UPDATE teams SET name = $1
     WHERE id = $2
+    RETURNING id, name, owner_id, created_at
     `,
     [name, teamId],
   );

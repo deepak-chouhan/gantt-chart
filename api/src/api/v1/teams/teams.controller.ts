@@ -7,6 +7,8 @@ import {
   getMyTeams,
   getTeamWithMembers,
   inviteMember,
+  leaveTeam,
+  removeMember,
   updateTeam,
 } from "./teams.service.js";
 import ApiResponse from "../../../utils/apiResponse.js";
@@ -76,7 +78,7 @@ export const getTeamController = async (
 
     return res.status(HttpStatus.OK).json(
       new ApiResponse({
-        statusCode: HttpStatus,
+        statusCode: HttpStatus.OK,
         message: "Team retrieved successfully",
         data: { team },
       }),
@@ -182,10 +184,52 @@ export const removeMemberController = async (
   req: Request,
   res: Response,
   next: NextFunction,
-) => {};
+) => {
+  try {
+    await removeMember(
+      req.params.teamId as string,
+      req.params.userId as string,
+      req.user.id,
+    );
+
+    return res.status(HttpStatus.OK).json(
+      new ApiResponse({
+        statusCode: HttpStatus.OK,
+        message: "User removed successfully",
+      }),
+    );
+  } catch (error) {
+    if (error instanceof AppError) {
+      return next(error);
+    }
+
+    return next(
+      new AppError(ErrorCode.INTERNAL_SERVER_ERROR, "Something went wrong"),
+    );
+  }
+};
 
 export const leaveTeamController = async (
   req: Request,
   res: Response,
   next: NextFunction,
-) => {};
+) => {
+  try {
+    await leaveTeam(req.params.teamId as string, req.user.id);
+
+    return res.status(HttpStatus.OK).json(
+      new ApiResponse({
+        statusCode: HttpStatus.OK,
+        message: "Left the team successfully",
+      }),
+    );
+  } catch (error) {
+    if (error instanceof AppError) {
+      return next(error);
+    }
+
+    return next(
+      new AppError(ErrorCode.INTERNAL_SERVER_ERROR, "Something went wrong"),
+    );
+  }
+};

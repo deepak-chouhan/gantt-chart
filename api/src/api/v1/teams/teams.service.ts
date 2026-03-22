@@ -52,7 +52,7 @@ export const updateTeam = async (
     );
   }
 
-  if (membership.role != "owner") {
+  if (membership.role != "ADMIN") {
     throw new AppError(
       ErrorCode.FORBIDDEN_ACCESS,
       "Only the owner can update the team",
@@ -97,7 +97,7 @@ export const inviteMember = async (
       "You are not a member of this team",
     );
   }
-  if (requestorMembership.role !== "OWNER") {
+  if (requestorMembership.role !== "ADMIN") {
     throw new AppError(
       ErrorCode.FORBIDDEN_ACCESS,
       "Only owner can invite members",
@@ -149,7 +149,7 @@ export const removeMember = async (
       "You are not a member of this team",
     );
   }
-  if (requestorMembership.role !== "OWNER") {
+  if (requestorMembership.role !== "ADMIN") {
     throw new AppError(
       ErrorCode.FORBIDDEN_ACCESS,
       "Only owner can remove members",
@@ -182,7 +182,7 @@ export const leaveTeam = async (teamId: string, userId: string) => {
     );
   }
 
-  if (membership.role === "OWNER") {
+  if (membership.role === "ADMIN") {
     throw new AppError(
       ErrorCode.INVALID_INPUT,
       "Owner cannot remove themselves, delete the team instead",

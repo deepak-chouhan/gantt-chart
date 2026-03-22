@@ -9,6 +9,7 @@ import {
 } from "./teams.validation.js";
 import {
   createTeamController,
+  deleteTeamController,
   getMyTeamController,
   getTeamController,
   inviteMemberController,
@@ -30,13 +31,9 @@ router.patch(
   validateUpdateTeam,
   updateTeamController,
 );
-router.delete("/:teamId", validateTeamIdParam);
+router.delete("/:teamId", validateTeamIdParam, deleteTeamController);
 
-router.delete(
-  "/:teamId/members/me",
-  validateTeamIdParam,
-  leaveTeamController,
-);
+router.delete("/:teamId/members/me", validateTeamIdParam, leaveTeamController);
 router.post(
   "/:teamId/members",
   validateTeamIdParam,
@@ -45,6 +42,7 @@ router.post(
 );
 router.delete(
   "/:teamId/members/:userId",
+  validateTeamIdParam,
   validateMemberParam,
   removeMemberController,
 );
