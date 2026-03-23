@@ -16,14 +16,14 @@ POST /auth/me
 ### TEAM Route
 
 ```
-POST /teams
-GET /teams
-GET /teams/:teamId
-PATCH /teams/:teamdId
-DELETE /team/:teamId
+POST /teams                             # Creates Team
+GET /teams                              # Gets team with matching user membership
+GET /teams/:teamId                      # Gets team with teamIdd along with members
+PATCH /teams/:teamId                    # Updates team with teamId
+DELETE /team/:teamId                    # Deletes team with teamId and membership
 
-POST /teams/:teamId/members
-DELETE /team/:teamId/members/:userId
+POST /teams/:teamId/members             # Add a user's membership in team
+DELETE /team/:teamId/members/:userId    # Remove a user's membership from team
 ```
 
 ### PROJECT Route

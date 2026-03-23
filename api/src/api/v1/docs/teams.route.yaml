@@ -1,0 +1,265 @@
+/teams:
+  post:
+    summary: Create a team and return team info
+    operationId: createTeam
+    tags:
+      - Teams
+    security:
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - name
+            properties:
+              name:
+                type: string
+                description: Team Name
+    responses:
+      201:
+        description: Team successfully created
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/ApiSuccess"
+                - type: object
+                  properties:
+                    data:
+                      type: object
+                      properties:
+                        team:
+                          $ref: "#/components/schemas/Team"
+      400:
+        description: Invalid request or input
+      401:
+        description: Invalid token or unauthorized
+      500:
+        description: Internal server error
+  get:
+    summary: Get all team having user's membership
+    operationId: getMyTeams
+    tags:
+      - Teams
+    security:
+      - bearerAuth: []
+    responses:
+      200:
+        description: Teams retrieved successfully
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/ApiSuccess"
+                - type: object
+                  properties:
+                    data:
+                      type: object
+                      properties:
+                        teams:
+                          type: array
+                          items:
+                            $ref: "#/components/schemas/Team"
+      401:
+        description: Invalid token or unauthorized
+      500:
+        description: Internal server error
+/teams/{teamId}:
+  get:
+    summary: Get team info having user's membership
+    operationId: getMyTeam
+    tags:
+      - Teams
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: teamId
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: Team retrieved successfully
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/ApiSuccess"
+                - type: object
+                  properties:
+                    data:
+                      type: object
+                      properties:
+                        team:
+                          $ref: "#/components/schemas/Team"
+      401:
+        description: Invalid token or unauthorized
+      500:
+        description: Internal server error
+  patch:
+    summary: Update a team with user's membership
+    operationId: updateMyTeam
+    tags:
+      - Teams
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: teamId
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+    responses:
+      200:
+        description: Team updated successfully
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/ApiSuccess"
+                - type: object
+                  properties:
+                    data:
+                      type: object
+                      properties:
+                        team:
+                          $ref: "#/components/schemas/Team"
+      401:
+        description: Invalid token or unauthorized
+      500:
+        description: Internal server error
+  delete:
+    summary: Delete a team with user's membership
+    operationId: deleteMyTeam
+    tags:
+      - Teams
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: teamId
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: Team deleted successfully
+        content:
+          application/json:
+            schema:
+              allOf:
+                  - $ref: "#/components/schemas/ApiSuccess"
+      401:
+        description: Invalid token or unauthorized
+      500:
+        description: Internal server error
+/teams/{teamId}/members:
+  post:
+    summary: Invite a member to team
+    operationId: inviteToTeam
+    tags:
+      - Teams
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: teamId
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - email
+            properties:
+              email:
+                type: string
+                description: User email
+    responses:
+      200:
+        description: Member invited successfully
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/ApiSuccess"
+      400:
+        description: Invalid member email
+      401:
+        description: Invalid token or unauthorized
+      500:
+        description: Internal server error
+/teams/{teamId}/members/{userId}:
+  delete:
+    summary: Remove a member from team
+    operationId: removeFromTeam
+    tags:
+      - Teams
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: teamId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: User removed successfully
+        content:
+          application/json:
+            schema:
+              allOf:
+                  - $ref: "#/components/schemas/ApiSuccess"
+      401:
+        description: Invalid token or unauthorized
+      500:
+        description: Internal server error
+/teams/{teamId}/members/me:
+  delete:
+    summary: Member leaves a team
+    operationId: removeMeFromTeam
+    tags:
+      - Teams
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: teamId
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: Left the team successfully
+        content:
+          application/json:
+            schema:
+              allOf:
+                  - $ref: "#/components/schemas/ApiSuccess"
+      401:
+        description: Invalid token or unauthorized
+      500:
+        description: Internal server error
