@@ -18,6 +18,12 @@ import {
   updateTeamController,
 } from "./teams.controller.js";
 
+import { validateCreateProject } from "../projects/projects.validation.js";
+import {
+  createProjectController,
+  getAllTeamProjectsController,
+} from "../projects/projects.controller.js";
+
 const router = Router();
 
 router.use(authenticate);
@@ -45,6 +51,19 @@ router.delete(
   validateTeamIdParam,
   validateMemberParam,
   removeMemberController,
+);
+
+// Project route scoped to team
+router.post(
+  "/:teamId/projects",
+  validateTeamIdParam,
+  validateCreateProject,
+  createProjectController,
+);
+router.get(
+  "/:teamId/projects",
+  validateTeamIdParam,
+  getAllTeamProjectsController,
 );
 
 export default router;

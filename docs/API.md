@@ -23,18 +23,18 @@ PATCH /teams/:teamId                    # Updates team with teamId
 DELETE /team/:teamId                    # Deletes team with teamId and membership
 
 POST /teams/:teamId/members             # Add a user's membership in team
-DELETE /team/:teamId/members/:userId    # Remove a user's membership from team
+DELETE /teams/:teamId/members/:userId   # Remove a user's membership from team
 ```
 
 ### PROJECT Route
 
 ```
-POST /teams/:teamId/projects
-GET /teams/:teamId/projects
+POST /teams/:teamId/projects            # Create a Project for team
+GET /teams/:teamId/projects             # Get all projects for team
 
-GET /projects/:projectId
-PATCH /projects/:projectId
-DELETE /projects/:projectId
+GET /projects/:projectId                # Get a single project
+PATCH /projects/:projectId              # Update a project
+DELETE /projects/:projectId             # Delete a project
 ```
 
 ### TASK Route
