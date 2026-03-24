@@ -1,13 +1,79 @@
 import { NextFunction, Request, Response } from "express";
+import { createProject, getAllTeamProjects } from "./projects.service.js";
+import { ErrorCode, HttpStatus } from "../../../types/error.types.js";
+import ApiResponse from "../../../utils/apiResponse.js";
+import AppError from "../../../utils/appError.js";
 
 export const createProjectController = async (
   req: Request,
   res: Response,
   next: NextFunction,
-) => {};
+) => {
+  const {
+    name,
+    description,
+    start_date: startDate,
+    end_date: endDate,
+  } = req.body;
+  try {
+    const { teamId } = req.params;
+
+    const project = await createProject(
+      name,
+      description ?? null,
+      startDate,
+      endDate,
+      teamId as string,
+      req.user.id,
+    );
+
+    return res.status(HttpStatus.OK).json(
+      new ApiResponse({
+        statusCode: HttpStatus.OK,
+        message: "Project created successfully",
+        data: {
+          project,
+        },
+      }),
+    );
+  } catch (error) {
+    if (error instanceof AppError) {
+      return next(error);
+    }
+
+    return next(
+      new AppError(ErrorCode.INTERNAL_SERVER_ERROR, "Something went wrong"),
+    );
+  }
+};
 
 export const getAllTeamProjectsController = async (
   req: Request,
   res: Response,
   next: NextFunction,
-) => {};
+) => {
+  try {
+    const teams = await getAllTeamProjects(
+      req.params.teamId as string,
+      req.user.id,
+    );
+
+    return res.status(HttpStatus.OK).json(
+      new ApiResponse({
+        statusCode: HttpStatus.OK,
+        message: "Teams retrieved succesfully",
+        data: {
+          teams,
+        },
+      }),
+    );
+  } catch (error) {
+    if (error instanceof AppError) {
+      return next(error);
+    }
+
+    return next(
+      new AppError(ErrorCode.INTERNAL_SERVER_ERROR, "Something went wrong"),
+    );
+  }
+};

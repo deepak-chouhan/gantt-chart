@@ -29,6 +29,7 @@ const options = {
         // entities
         ...loadYaml(`${docsDir}/components/schemas/user.schema.yaml`),
         ...loadYaml(`${docsDir}/components/schemas/team.schema.yaml`),
+        ...loadYaml(`${docsDir}/components/schemas/project.schema.yaml`),
       },
       securitySchemes: loadYaml(`${docsDir}/components/security.yaml`),
     },
