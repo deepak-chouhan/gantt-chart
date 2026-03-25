@@ -32,7 +32,7 @@ DELETE /teams/:teamId/members/:userId   # Remove a user's membership from team
 POST /teams/:teamId/projects            # Create a Project for team
 GET /teams/:teamId/projects             # Get all projects for team
 
-GET /projects/:projectId                # Get a single project
+GET /projects/:projectId                # Get project by Id
 PATCH /projects/:projectId              # Update a project
 DELETE /projects/:projectId             # Delete a project
 ```
@@ -78,11 +78,11 @@ WS /ws/projects/:projectId
 
 ```json
 {
-    "success": false,
-    "error": {
-        "code": "FOREBIDEN_ACCESS",
-        "message": "User does not have access to view the project"
-    }
+  "success": false,
+  "error": {
+    "code": "FOREBIDEN_ACCESS",
+    "message": "User does not have access to view the project"
+  }
 }
 ```
 

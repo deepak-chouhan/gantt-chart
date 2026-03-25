@@ -14,12 +14,21 @@ const createProjectSchema = z
       .trim()
       .nullable()
       .optional(),
-    start_date: z.date("Invalid date format, expected YYYY-MM-DD"),
-    end_date: z.date("Invalid date format, expected YYYY-MM-DD"),
+    start_date: z.coerce.date({
+      error: "Invalid date format, expected YYYY-MM-DD",
+    }),
+    end_date: z.coerce.date({
+      error: "Invalid date format, expected YYYY-MM-DD",
+    }),
   })
   .refine((data) => new Date(data.end_date) > new Date(data.start_date), {
     message: "End date must be after start date",
     path: ["end_date"],
   });
 
+const projectIdParamSchema = z.object({
+  projectId: z.uuid("Invalid projectId").trim(),
+});
+
 export const validateCreateProject = validate(createProjectSchema);
+export const validateProjectIdParam = validate(projectIdParamSchema);

@@ -18,7 +18,7 @@ const updateTeamSchema = z.object({
 });
 
 const teamIdParamSchema = z.object({
-  teamId: z.uuid("Invalid team ID").trim(),
+  teamId: z.uuid("Invalid teamId").trim(),
 });
 
 const inviteMemberSchema = z.object({

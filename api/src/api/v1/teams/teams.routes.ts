@@ -21,7 +21,7 @@ import {
 import { validateCreateProject } from "../projects/projects.validation.js";
 import {
   createProjectController,
-  getAllTeamProjectsController,
+  getProjectsByTeamController,
 } from "../projects/projects.controller.js";
 
 const router = Router();
@@ -63,7 +63,7 @@ router.post(
 router.get(
   "/:teamId/projects",
   validateTeamIdParam,
-  getAllTeamProjectsController,
+  getProjectsByTeamController,
 );
 
 export default router;
