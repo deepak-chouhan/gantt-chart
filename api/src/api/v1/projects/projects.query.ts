@@ -2,6 +2,7 @@ import { pool } from "../../../config/db.js";
 import { IProject } from "../../../types/project.types.js";
 import AppError from "../../../utils/appError.js";
 import { ErrorCode } from "../../../types/error.types.js";
+import { toCamelCaseKeys } from "../../../utils/transform.js";
 
 export const createProjectQuery = async (
   name: string,
@@ -9,7 +10,7 @@ export const createProjectQuery = async (
   startDate: string,
   endDate: string,
   teamId: string,
-) => {
+): Promise<IProject> => {
   const client = await pool.connect();
   try {
     await client.query("BEGIN");
@@ -25,7 +26,7 @@ export const createProjectQuery = async (
 
     await client.query("COMMIT");
 
-    return rows[0];
+    return toCamelCaseKeys(rows[0]);
   } catch (error) {
     await client.query("ROLLBACK");
     throw error;
@@ -34,7 +35,9 @@ export const createProjectQuery = async (
   }
 };
 
-export const getProjectsByTeamIdQuery = async (teamId: string) => {
+export const getProjectsByTeamIdQuery = async (
+  teamId: string,
+): Promise<IProject[]> => {
   const { rows } = await pool.query(
     `
     SELECT id, name, description, start_date, end_date, team_id
@@ -44,10 +47,12 @@ export const getProjectsByTeamIdQuery = async (teamId: string) => {
     [teamId],
   );
 
-  return rows;
+  return rows.map((row) => toCamelCaseKeys(row));
 };
 
-export const getProjectByIdQuery = async (projectId: string) => {
+export const getProjectByIdQuery = async (
+  projectId: string,
+): Promise<IProject | null> => {
   const { rows } = await pool.query(
     `
     SELECT id, name, description, start_date, end_date, team_id
@@ -57,15 +62,15 @@ export const getProjectByIdQuery = async (projectId: string) => {
     [projectId],
   );
 
-  return rows[0] || null;
+  return rows[0] ? toCamelCaseKeys<IProject>(rows[0]) : null;
 };
 
 export const updateProjectQuery = async (
   projectId: string,
   fields: Partial<
-    Pick<IProject, "name" | "description" | "start_date" | "end_date">
+    Pick<IProject, "name" | "description" | "statDate" | "endDate">
   >,
-) => {
+): Promise<IProject | null> => {
   const updates: string[] = [];
   const values: unknown[] = [];
 
@@ -79,13 +84,13 @@ export const updateProjectQuery = async (
     updates.push(`description = $${idx++}`);
     values.push(fields.description);
   }
-  if (fields.start_date !== undefined) {
+  if (fields.statDate !== undefined) {
     updates.push(`start_date = $${idx++}`);
-    values.push(fields.start_date);
+    values.push(fields.statDate);
   }
-  if (fields.end_date !== undefined) {
+  if (fields.endDate !== undefined) {
     updates.push(`end_date = $${idx++}`);
-    values.push(fields.end_date);
+    values.push(fields.endDate);
   }
 
   if (updates.length === 0) {
@@ -103,5 +108,5 @@ export const updateProjectQuery = async (
     values,
   );
 
-  return rows[0];
+  return rows[0] ? toCamelCaseKeys<IProject>(rows[0]) : null;
 };

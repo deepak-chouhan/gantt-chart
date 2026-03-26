@@ -9,7 +9,9 @@ import {
   updateProjectQuery,
 } from "./projects.query.js";
 
-export const assertProjectExists = async (projectId: string) => {
+export const assertProjectExists = async (
+  projectId: string,
+): Promise<IProject> => {
   const project = await getProjectByIdQuery(projectId);
   if (!project) {
     throw new AppError(ErrorCode.RESOURCE_NOT_FOUND, "Project not found");
@@ -58,7 +60,7 @@ export const getAllTeamProjects = async (teamId: string, userId: string) => {
 export const getProject = async (projectId: string, userId: string) => {
   const project = await assertProjectExists(projectId);
 
-  const membership = await getTeamMembershipQuery(project.team_id, userId);
+  const membership = await getTeamMembershipQuery(project.teamId, userId);
   if (!membership) {
     throw new AppError(
       ErrorCode.FORBIDDEN_ACCESS,
@@ -73,12 +75,12 @@ export const updateProject = async (
   projectId: string,
   userId: string,
   fields: Partial<
-    Pick<IProject, "name" | "description" | "start_date" | "end_date">
+    Pick<IProject, "name" | "description" | "statDate" | "endDate">
   >,
 ) => {
   const project = await assertProjectExists(projectId);
 
-  const membership = await getTeamMembershipQuery(project.team_id, userId);
+  const membership = await getTeamMembershipQuery(project.teamId, userId);
   if (!membership) {
     throw new AppError(
       ErrorCode.FORBIDDEN_ACCESS,
@@ -86,8 +88,8 @@ export const updateProject = async (
     );
   }
 
-  const newStartDate = fields.start_date ?? project.start_date;
-  const newEndDate = fields.end_date ?? project.end_date;
+  const newStartDate = fields.statDate ?? project.statDate;
+  const newEndDate = fields.endDate ?? project.endDate;
 
   if (new Date(newEndDate) < new Date(newStartDate)) {
     throw new AppError(
@@ -96,5 +98,5 @@ export const updateProject = async (
     );
   }
 
-  return await updateProjectQuery(project, fields);
+  return await updateProjectQuery(project.id, fields);
 };

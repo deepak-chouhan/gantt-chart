@@ -14,14 +14,14 @@ const createProjectSchema = z
       .trim()
       .nullable()
       .optional(),
-    start_date: z.coerce.date({
+    startDate: z.coerce.date({
       error: "Invalid date format, expected YYYY-MM-DD",
     }),
-    end_date: z.coerce.date({
+    endDate: z.coerce.date({
       error: "Invalid date format, expected YYYY-MM-DD",
     }),
   })
-  .refine((data) => new Date(data.end_date) > new Date(data.start_date), {
+  .refine((data) => new Date(data.endDate) > new Date(data.startDate), {
     message: "End date must be after start date",
     path: ["end_date"],
   });

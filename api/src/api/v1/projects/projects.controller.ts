@@ -9,12 +9,7 @@ export const createProjectController = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const {
-    name,
-    description,
-    start_date: startDate,
-    end_date: endDate,
-  } = req.body;
+  const { name, description, startDate, endDate } = req.body;
   try {
     const { teamId } = req.params;
 

@@ -8,14 +8,14 @@ Project:
     name:
       type: string
       example: "My Cool Project"
-    start_date:
+    startDate:
       type: string
       format: date
       example: 2025-12-01
-    end_date:
+    endDate:
       type: string
       format: 2026-01-01
-    team_id:
+    teamId:
       type: string
       format: uuid
       example: 550e8400-e29b-41d4-a716-446655540000
