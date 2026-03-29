@@ -110,3 +110,7 @@ export const updateProjectQuery = async (
 
   return rows[0] ? toCamelCaseKeys<IProject>(rows[0]) : null;
 };
+
+export const deleteProjectQuery = async (projectId: string) => {
+  await pool.query("DELETE FROM projects WHERE id = $1", [projectId]);
+};

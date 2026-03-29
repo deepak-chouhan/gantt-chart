@@ -1,5 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import { createProject, getAllTeamProjects } from "./projects.service.js";
+import {
+  createProject,
+  deleteProject,
+  getAllTeamProjects,
+  getProject,
+  updateProject,
+} from "./projects.service.js";
 import { ErrorCode, HttpStatus } from "../../../types/error.types.js";
 import ApiResponse from "../../../utils/apiResponse.js";
 import AppError from "../../../utils/appError.js";
@@ -79,6 +85,18 @@ export const getProjectByIdController = async (
   next: NextFunction,
 ) => {
   try {
+    const project = await getProject(
+      req.params.projectId as string,
+      req.user.id,
+    );
+
+    return res.status(HttpStatus.OK).json(
+      new ApiResponse({
+        statusCode: HttpStatus.OK,
+        message: "Project retrieved successfully",
+        data: { project },
+      }),
+    );
   } catch (error) {
     if (error instanceof AppError) {
       return next(error);
@@ -96,6 +114,19 @@ export const updateProjectByIdController = async (
   next: NextFunction,
 ) => {
   try {
+    const project = await updateProject(
+      req.params.projectId as string,
+      req.user.id,
+      req.body,
+    );
+
+    return res.status(HttpStatus.OK).json(
+      new ApiResponse({
+        statusCode: HttpStatus.OK,
+        message: "Project updated successfully",
+        data: { project },
+      }),
+    );
   } catch (error) {
     if (error instanceof AppError) {
       return next(error);
@@ -113,6 +144,14 @@ export const deleteProjectByIdController = async (
   next: NextFunction,
 ) => {
   try {
+    await deleteProject(req.params.projectId as string, req.user.id);
+
+    return res.status(HttpStatus.OK).json(
+      new ApiResponse({
+        statusCode: HttpStatus.OK,
+        message: "Project deleted successfully",
+      }),
+    );
   } catch (error) {
     if (error instanceof AppError) {
       return next(error);

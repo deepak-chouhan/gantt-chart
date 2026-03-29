@@ -31,4 +31,4 @@ const projectIdParamSchema = z.object({
 });
 
 export const validateCreateProject = validate(createProjectSchema);
-export const validateProjectIdParam = validate(projectIdParamSchema);
+export const validateProjectIdParam = validate(projectIdParamSchema, "params");

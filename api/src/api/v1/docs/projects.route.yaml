@@ -20,6 +20,8 @@
             type: object
             required:
               - name
+              - startDate
+              - endDate
             properties:
               name:
                 type: string
@@ -88,6 +90,120 @@
                           type: array
                           items:
                             $ref: "#/components/schemas/Project"
+      401:
+        description: Invalid token or unauthorized
+      500:
+        description: Internal server error
+/projects/{projectId}:
+  get:
+    summary: Get project by Id
+    operationId: getProject
+    tags:
+      - Projects
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: Project retrieved successfully
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/ApiSuccess"
+                - type: object
+                  properties:
+                    data:
+                      type: object
+                      properties:
+                        project:
+                          $ref: "#/components/schemas/Project"
+      401:
+        description: Invalid token or unauthorized
+      500:
+        description: Internal server error
+  patch:
+    summary: Update project by Id
+    operationId: updateProject
+    tags:
+      - Projects
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              name:
+                type: string
+                description: Project Name
+              description:
+                type: string
+                description: Project description
+              startDate:
+                type: string
+                format: date
+                example: 2025-12-31
+                description: Project Start Date
+              endDate:
+                type: string
+                format: date
+                example: 2026-12-31
+                description: Project Start Date
+    responses:
+      200:
+        description: Project updated successfully
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/ApiSuccess"
+                - type: object
+                  properties:
+                    data:
+                      type: object
+                      properties:
+                        project:
+                          $ref: "#/components/schemas/Project"
+      401:
+        description: Invalid token or unauthorized
+      500:
+        description: Internal server error
+  delete:
+    summary: Delete project by Id
+    operationId: deleteProject
+    tags:
+      - Projects
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: Project retrieved successfully
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/ApiSuccess"
       401:
         description: Invalid token or unauthorized
       500:

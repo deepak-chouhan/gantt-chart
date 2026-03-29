@@ -4,6 +4,7 @@ import AppError from "../../../utils/appError.js";
 import { getTeamMembershipQuery } from "../teams/teams.query.js";
 import {
   createProjectQuery,
+  deleteProjectQuery,
   getProjectByIdQuery,
   getProjectsByTeamIdQuery,
   updateProjectQuery,
@@ -99,4 +100,17 @@ export const updateProject = async (
   }
 
   return await updateProjectQuery(project.id, fields);
+};
+
+export const deleteProject = async (projectId: string, userId: string) => {
+  const project = await assertProjectExists(projectId);
+  const membership = await getTeamMembershipQuery(project.teamId, userId);
+  if (!membership) {
+    throw new AppError(
+      ErrorCode.FORBIDDEN_ACCESS,
+      "You are not a member of this team",
+    );
+  }
+
+  return await deleteProjectQuery(projectId);
 };
