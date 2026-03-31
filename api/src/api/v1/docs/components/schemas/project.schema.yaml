@@ -1,0 +1,21 @@
+Project:
+  type: object
+  properties:
+    id:
+      type: string
+      format: uuid
+      example: 550e8400-e29b-41d4-a716-446655440000
+    name:
+      type: string
+      example: "My Cool Project"
+    startDate:
+      type: string
+      format: date
+      example: 2025-12-01
+    endDate:
+      type: string
+      format: 2026-01-01
+    teamId:
+      type: string
+      format: uuid
+      example: 550e8400-e29b-41d4-a716-446655540000
