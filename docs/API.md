@@ -40,12 +40,12 @@ DELETE /projects/:projectId             # Delete a project
 ### TASK Route
 
 ```
-POST /projects/:projectId/tasks
-GET /projects/:projectId/tasks
+POST /projects/:projectId/tasks         # Create a task in a project
+GET /projects/:projectId/tasks          # Get all tasks in a project
 
-GET /tasks/:taskId
-PATCH /tasks/:taskId
-DELETE /tasks/:taskId
+GET /tasks/:taskId                      # Get a task by Id
+PATCH /tasks/:taskId                    # Update a task
+DELETE /tasks/:taskId                   # Delete a task
 ```
 
 ### CSV IMPORT/EXPORT Route

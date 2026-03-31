@@ -26,12 +26,13 @@
 ### 3. TASKS & SUBTASKS
 
 - **TASK-001** [Ubiquitous]: THE system shall store following data for each task:
-    - Name
-    - Status
-    - Assigne
-    - Start Date
-    - End Date
-    - Parent Project
+  - Name
+  - Status
+  - Assignee Id
+  - Start Date
+  - End Date
+  - Parent Task Id
+  - Project Id
 - **TASK-002** [Event-driven]: WHEN a task is created/updated/deleted, THE system shall boardcast the event to all users subscribed to the parent project via WebSocket.
 - **TASK-003** [Event-driven]: WHEN the task's status is updated to **completed**, THE system shall check if all sibling tasks are completed and If so, emit a project completion event.
 - **TASK-004** [Unwanted-behaviour]: IF a task's end date is set to before its start date, the system shall return a 400 Bad Request.
