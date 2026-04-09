@@ -5,12 +5,14 @@ import {
   validateProjectIdParam,
 } from "./projects.validation.js";
 import {
-  createProjectController,
   deleteProjectByIdController,
   getProjectByIdController,
   updateProjectByIdController,
 } from "./projects.controller.js";
-import { getTasksByProjectController } from "../tasks/tasks.controller.js";
+import {
+  createTaskController,
+  getTasksByProjectController,
+} from "../tasks/tasks.controller.js";
 
 const router = Router();
 
@@ -33,7 +35,7 @@ router.post(
   "/:projectId/tasks",
   validateProjectIdParam,
   validateCreateProject,
-  createProjectController,
+  createTaskController,
 );
 router.get(
   "/:projectId/tasks",

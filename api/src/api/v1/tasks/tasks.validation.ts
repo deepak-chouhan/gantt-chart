@@ -19,4 +19,9 @@ const createTaskSchema = z.object({
   parentTaskId: z.uuid("Invalid parent task ID").nullable().optional(),
 });
 
+const taskIdSchema = z.object({
+  taskId: z.uuid("Invalid task Id").trim(),
+});
+
 export const validateCreateTask = validate(createTaskSchema);
+export const validateTaskIdParam = validate(taskIdSchema, "params");

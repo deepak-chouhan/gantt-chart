@@ -1,7 +1,100 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
+import { ErrorCode, HttpStatus } from "../../../types/error.types.js";
+import { createTask, getTask, getTasksByProject } from "./tasks.service.js";
+import AppError from "../../../utils/appError.js";
+import ApiResponse from "../../../utils/apiResponse.js";
 
-export const createTaskController = async (req: Request, res: Response) => {};
+export const createTaskController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const projectId = req.params.projectId as string;
+    const userId = req.user.id;
+    const { name, status, startDate, endDate, assigneeId, parentTaskId } =
+      req.body;
+
+    const task = await createTask(
+      name,
+      status,
+      startDate,
+      endDate,
+      projectId,
+      assigneeId ?? null,
+      parentTaskId ?? null,
+      userId,
+    );
+
+    return res.status(HttpStatus.CREATED).json(
+      new ApiResponse({
+        statusCode: HttpStatus.CREATED,
+        message: "Task created successfully",
+        data: { task },
+      }),
+    );
+  } catch (error) {
+    if (error instanceof AppError) {
+      return next(error);
+    }
+
+    return next(
+      new AppError(ErrorCode.INTERNAL_SERVER_ERROR, "Something went wrong"),
+    );
+  }
+};
+
 export const getTasksByProjectController = async (
   req: Request,
   res: Response,
-) => {};
+  next: NextFunction,
+) => {
+  try {
+    const tasks = await getTasksByProject(
+      req.params.projectId as string,
+      req.user.id,
+    );
+
+    return res.status(HttpStatus.OK).json(
+      new ApiResponse({
+        statusCode: HttpStatus.OK,
+        message: "Tasks retrieved successfully",
+        data: { tasks },
+      }),
+    );
+  } catch (error) {
+    if (error instanceof AppError) {
+      return next(error);
+    }
+
+    return next(
+      new AppError(ErrorCode.INTERNAL_SERVER_ERROR, "Something went wrong"),
+    );
+  }
+};
+
+export const getTaskController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const task = await getTask(req.params.taskId as string, req.user.id);
+
+    return res.status(HttpStatus.OK).json(
+      new ApiResponse({
+        statusCode: HttpStatus.OK,
+        message: "Task retrieved successfully",
+        data: { task },
+      }),
+    );
+  } catch (error) {
+    if (error instanceof AppError) {
+      return next(error);
+    }
+
+    return next(
+      new AppError(ErrorCode.INTERNAL_SERVER_ERROR, "Something went wrong"),
+    );
+  }
+};
