@@ -8,5 +8,30 @@ Task:
     name:
       type: string
       example: "Complete the Swagger Doc for Task Endpoint"
-
-# TODO: Complete this doc
+    status:
+      type: string
+      enum:
+        - OPEN
+        - IN_PROGRESS
+        - COMPLETED
+        - BLOCKED
+    startDate:
+      type: string
+      format: date
+      example: 2025-12-01
+    endDate:
+      type: string
+      format: date
+      example: 2026-01-01
+    assigneeId:
+      type: string
+      format: uuid
+      example: 550e8400-e29b-41d4-a716-446655540000
+    projectId:
+      type: string
+      format: uuid
+      example: 550e8400-e29b-41d4-a716-446655540000
+    parentTaskId:
+      type: string
+      format: uuid
+      example: 550e8400-e29b-41d4-a716-546655540000

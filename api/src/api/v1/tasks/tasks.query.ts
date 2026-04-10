@@ -1,5 +1,7 @@
 import { pool } from "../../../config/db.js";
+import { ErrorCode } from "../../../types/error.types.js";
 import { ITask, ITaskWithSubTasks } from "../../../types/task.types.js";
+import AppError from "../../../utils/appError.js";
 import { toCamelCaseKeys } from "../../../utils/transform.js";
 
 export const createTaskQuery = async (
@@ -70,4 +72,70 @@ export const getTaskByIdQuery = async (taskId: string) => {
   );
 
   return rows[0] ? toCamelCaseKeys<ITask>(rows[0]) : null;
+};
+
+export const updateTaskQuery = async (
+  taskId: string,
+  fields: Partial<
+    Pick<
+      ITask,
+      | "name"
+      | "status"
+      | "startDate"
+      | "endDate"
+      | "assigneeId"
+      | "parentTaskId"
+    >
+  >,
+) => {
+  const updates: string[] = [];
+  const values: unknown[] = [];
+  let idx = 1;
+
+  if (fields.name !== undefined) {
+    updates.push(`name=$${idx++}`);
+    values.push(fields.name);
+  }
+  if (fields.status !== undefined) {
+    updates.push(`status=$${idx++}`);
+    values.push(fields.status);
+  }
+  if (fields.startDate !== undefined) {
+    updates.push(`start_date=$${idx++}`);
+    values.push(fields.startDate);
+  }
+  if (fields.endDate !== undefined) {
+    updates.push(`end_date=$${idx++}`);
+    values.push(fields.endDate);
+  }
+  if (fields.assigneeId !== undefined) {
+    updates.push(`assignee_id=$${idx++}`);
+    values.push(fields.assigneeId);
+  }
+  if (fields.parentTaskId !== undefined) {
+    updates.push(`parent_task_id=$${idx++}`);
+    values.push(fields.parentTaskId);
+  }
+
+  values.push(taskId);
+
+  if (updates.length === 0) {
+    throw new AppError(ErrorCode.INVALID_INPUT, "No fields provided to update");
+  }
+
+  const { rows } = await pool.query(
+    `
+    UPDATE tasks
+    SET ${updates.join(", ")}
+    WHERE id=$${idx}
+    RETURNING name, status, start_date, end_date, assignee_id, project_id, parent_task_id
+    `,
+    values,
+  );
+
+  return rows[0] ? toCamelCaseKeys<ITask>(rows[0]) : null;
+};
+
+export const deleteTaskQuery = async (taskId: string) => {
+  await pool.query("DELETE FROM tasks WHERE id=$1", [taskId]);
 };

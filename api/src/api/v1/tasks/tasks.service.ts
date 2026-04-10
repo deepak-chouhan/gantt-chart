@@ -1,12 +1,15 @@
 import { ErrorCode } from "../../../types/error.types.js";
+import { ITask, TaskStatus } from "../../../types/task.types.js";
 import AppError from "../../../utils/appError.js";
 import { assertProjectExists } from "../projects/projects.service.js";
 import { getTeamMembershipQuery } from "../teams/teams.query.js";
 import { assertTeamMember } from "../teams/teams.service.js";
 import {
   createTaskQuery,
+  deleteTaskQuery,
   getTaskByIdQuery,
   getTasksByProjectIdQuery,
+  updateTaskQuery,
 } from "./tasks.query.js";
 
 export const assertTaskExists = async (taskId: string) => {
@@ -85,4 +88,24 @@ export const getTask = async (taskId: string, userId: string) => {
   await assertTeamMember(project.teamId, userId);
 
   return task;
+};
+
+export const updateTask = async (
+  taskId: string,
+  userId: string,
+  fields: Partial<ITask>,
+) => {
+  const task = await assertTaskExists(taskId);
+  const project = await assertProjectExists(task.projectId);
+  await assertTeamMember(project.id, userId);
+
+  return await updateTaskQuery(taskId, fields);
+};
+
+export const deleteTask = async (taskId: string, userId: string) => {
+  const task = await assertTaskExists(taskId);
+  const project = await assertProjectExists(task.projectId);
+  await assertTeamMember(project.id, userId);
+
+  await deleteTaskQuery(taskId);
 };

@@ -101,10 +101,10 @@ export const updateProjectQuery = async (
 
   const { rows } = await pool.query(
     `
-      UPDATE projects SET ${updates.join(", ")}
-      WHERE id = $${idx}
-      RETURNING id, name, description, start_date, end_date, team_id
-      `,
+    UPDATE projects SET ${updates.join(", ")}
+    WHERE id = $${idx}
+    RETURNING id, name, description, start_date, end_date, team_id
+    `,
     values,
   );
 
