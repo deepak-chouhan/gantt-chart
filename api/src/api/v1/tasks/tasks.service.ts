@@ -1,5 +1,5 @@
 import { ErrorCode } from "../../../types/error.types.js";
-import { ITask, TaskStatus } from "../../../types/task.types.js";
+import { ITask } from "../../../types/task.types.js";
 import AppError from "../../../utils/appError.js";
 import { assertProjectExists } from "../projects/projects.service.js";
 import { getTeamMembershipQuery } from "../teams/teams.query.js";
