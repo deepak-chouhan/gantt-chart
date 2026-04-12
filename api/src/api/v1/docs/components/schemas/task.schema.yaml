@@ -4,7 +4,7 @@ Task:
     id:
       type: string
       format: uuid
-      example: "550e8400-e29b-41d4-a716-446655540000"
+      example: "550e8400-e29b-41d4-a716-446655540009"
     name:
       type: string
       example: "Complete the Swagger Doc for Task Endpoint"
@@ -30,8 +30,8 @@ Task:
     projectId:
       type: string
       format: uuid
-      example: 550e8400-e29b-41d4-a716-446655540000
+      example: 550e8400-e29b-41d4-a716-446655540001
     parentTaskId:
       type: string
       format: uuid
-      example: 550e8400-e29b-41d4-a716-546655540000
+      example: 550e8400-e29b-41d4-a716-546655540003

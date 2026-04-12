@@ -30,6 +30,7 @@ const options = {
         ...loadYaml(`${docsDir}/components/schemas/user.schema.yaml`),
         ...loadYaml(`${docsDir}/components/schemas/team.schema.yaml`),
         ...loadYaml(`${docsDir}/components/schemas/project.schema.yaml`),
+        ...loadYaml(`${docsDir}/components/schemas/task.schema.yaml`),
       },
       securitySchemes: loadYaml(`${docsDir}/components/security.yaml`),
     },

@@ -1,9 +1,6 @@
 import { Router } from "express";
 import { authenticate } from "../../../middleware/authenticate.js";
-import {
-  validateCreateProject,
-  validateProjectIdParam,
-} from "./projects.validation.js";
+import { validateProjectIdParam } from "./projects.validation.js";
 import {
   deleteProjectByIdController,
   getProjectByIdController,
@@ -13,6 +10,7 @@ import {
   createTaskController,
   getTasksByProjectController,
 } from "../tasks/tasks.controller.js";
+import { validateCreateTask } from "../tasks/tasks.validation.js";
 
 const router = Router();
 
@@ -34,7 +32,7 @@ router.delete(
 router.post(
   "/:projectId/tasks",
   validateProjectIdParam,
-  validateCreateProject,
+  validateCreateTask,
   createTaskController,
 );
 router.get(

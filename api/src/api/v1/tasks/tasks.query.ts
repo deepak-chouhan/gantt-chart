@@ -15,7 +15,7 @@ export const createTaskQuery = async (
 ): Promise<ITask> => {
   const { rows } = await pool.query(
     `
-    INSER INTO tasks
+    INSERT INTO tasks
     (name, status, start_date, end_date, project_id, assignee_id, parent_task_id)
     VALUES ($1, $2, $3, $4, $5, $6, $7)
     RETURNING id, name, start_date, end_date, project_id, assignee_id, parent_task_id
