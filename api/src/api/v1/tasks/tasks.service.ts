@@ -97,15 +97,15 @@ export const updateTask = async (
 ) => {
   const task = await assertTaskExists(taskId);
   const project = await assertProjectExists(task.projectId);
-  await assertTeamMember(project.id, userId);
-
+  await assertTeamMember(project.teamId, userId);
+  
   return await updateTaskQuery(taskId, fields);
 };
 
 export const deleteTask = async (taskId: string, userId: string) => {
   const task = await assertTaskExists(taskId);
   const project = await assertProjectExists(task.projectId);
-  await assertTeamMember(project.id, userId);
+  await assertTeamMember(project.teamId, userId);
 
   await deleteTaskQuery(taskId);
 };

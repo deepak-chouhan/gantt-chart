@@ -54,7 +54,7 @@ export const getProjectsByTeamController = async (
   next: NextFunction,
 ) => {
   try {
-    const teams = await getAllTeamProjects(
+    const projects = await getAllTeamProjects(
       req.params.teamId as string,
       req.user.id,
     );
@@ -64,7 +64,7 @@ export const getProjectsByTeamController = async (
         statusCode: HttpStatus.OK,
         message: "Teams retrieved succesfully",
         data: {
-          teams,
+          projects,
         },
       }),
     );

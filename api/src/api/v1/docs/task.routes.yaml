@@ -85,7 +85,7 @@
           type: string
     responses:
       201:
-        description: Task created successfully
+        description: Tasks retrieved successfully
         content:
           application/json:
             schema:
@@ -102,6 +102,133 @@
                             $ref: "#/components/schemas/Task"
       400:
         description: Invalid request or input
+      401:
+        description: Invalid token or unauthorized
+      500:
+        description: Internal server error
+/tasks/{taskId}:
+  get:
+    summary: Get a task by Id
+    operationId: getTask
+    tags:
+      - Tasks
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: taskId
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: Task retrieved successfully
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/ApiSuccess"
+                - type: object
+                  properties:
+                    data:
+                      type: object
+                      properties:
+                        task:
+                          $ref: "#/components/schemas/Task"
+      401:
+        description: Invalid token or unauthorized
+      500:
+        description: Internal server error
+  patch:
+    summary: Update a task
+    operationId: updateTask
+    tags:
+      - Tasks
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: taskId
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - name
+              - startDate
+              - endDate
+            properties:
+              name:
+                type: string
+                example: "Complete the Swagger Doc for Task Endpoint"
+              status:
+                type: string
+                enum:
+                  - OPEN
+                  - IN_PROGRESS
+                  - COMPLETED
+                  - BLOCKED
+              startDate:
+                type: string
+                format: date
+                example: 2025-12-01
+              endDate:
+                type: string
+                format: date
+                example: 2026-01-01
+              assigneeId:
+                type: string
+                format: uuid
+                example: 550e8400-e29b-41d4-a716-446655540000
+              parentTaskId:
+                type: string
+                format: uuid
+                example: 550e8400-e29b-41d4-a716-546655540000
+    responses:
+      200:
+        description: Task updated successfully
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/ApiSuccess"
+                - type: object
+                  properties:
+                    data:
+                      type: object
+                      properties:
+                        task:
+                          $ref: "#/components/schemas/Task"
+      401:
+        description: Invalid token or unauthorized
+      500:
+        description: Internal server error
+  delete:
+    summary: Delete a task
+    operationId: deleteTask
+    tags:
+      - Tasks
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: taskId
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: Task updated successfully
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/ApiSuccess"
       401:
         description: Invalid token or unauthorized
       500:

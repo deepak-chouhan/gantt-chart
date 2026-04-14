@@ -155,7 +155,7 @@ export const deleteTaskController = async (
 
     return res.status(HttpStatus.OK).json(
       new ApiResponse({
-        statusCode: HttpStatus,
+        statusCode: HttpStatus.OK,
         message: "Task deleted successfully",
       }),
     );

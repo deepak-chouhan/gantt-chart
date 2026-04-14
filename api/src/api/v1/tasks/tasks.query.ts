@@ -128,7 +128,7 @@ export const updateTaskQuery = async (
     UPDATE tasks
     SET ${updates.join(", ")}
     WHERE id=$${idx}
-    RETURNING name, status, start_date, end_date, assignee_id, project_id, parent_task_id
+    RETURNING id, name, status, start_date, end_date, assignee_id, project_id, parent_task_id
     `,
     values,
   );
