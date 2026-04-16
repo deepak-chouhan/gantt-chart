@@ -13,6 +13,18 @@ import {
 import { pool } from "../../../config/db.js";
 import { IUser } from "../../../types/user.types.js";
 
+export const assertTeamMember = async (teamId: string, userId: string) => {
+  const membership = await getTeamMembershipQuery(teamId, userId);
+  if (!membership) {
+    throw new AppError(
+      ErrorCode.FORBIDDEN_ACCESS,
+      "You are not a member of this team",
+    );
+  }
+
+  return membership;
+};
+
 export const createTeam = async (name: string, userId: string) => {
   return await createTeamQuery(name, userId);
 };

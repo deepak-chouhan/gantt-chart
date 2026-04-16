@@ -1,40 +1,42 @@
 import { NextFunction, Request, Response } from "express";
-import {
-  createProject,
-  deleteProject,
-  getAllTeamProjects,
-  getProject,
-  updateProject,
-} from "./projects.service.js";
 import { ErrorCode, HttpStatus } from "../../../types/error.types.js";
-import ApiResponse from "../../../utils/apiResponse.js";
+import {
+  createTask,
+  deleteTask,
+  getTask,
+  getTasksByProject,
+  updateTask,
+} from "./tasks.service.js";
 import AppError from "../../../utils/appError.js";
+import ApiResponse from "../../../utils/apiResponse.js";
 
-export const createProjectController = async (
+export const createTaskController = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
-  const { name, description, startDate, endDate } = req.body;
   try {
-    const { teamId } = req.params;
+    const projectId = req.params.projectId as string;
+    const userId = req.user.id;
+    const { name, status, startDate, endDate, assigneeId, parentTaskId } =
+      req.body;
 
-    const project = await createProject(
+    const task = await createTask(
       name,
-      description ?? null,
+      status,
       startDate,
       endDate,
-      teamId as string,
-      req.user.id,
+      projectId,
+      assigneeId ?? null,
+      parentTaskId ?? null,
+      userId,
     );
 
-    return res.status(HttpStatus.OK).json(
+    return res.status(HttpStatus.CREATED).json(
       new ApiResponse({
-        statusCode: HttpStatus.OK,
-        message: "Project created successfully",
-        data: {
-          project,
-        },
+        statusCode: HttpStatus.CREATED,
+        message: "Task created successfully",
+        data: { task },
       }),
     );
   } catch (error) {
@@ -48,44 +50,13 @@ export const createProjectController = async (
   }
 };
 
-export const getProjectsByTeamController = async (
+export const getTasksByProjectController = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   try {
-    const projects = await getAllTeamProjects(
-      req.params.teamId as string,
-      req.user.id,
-    );
-
-    return res.status(HttpStatus.OK).json(
-      new ApiResponse({
-        statusCode: HttpStatus.OK,
-        message: "Teams retrieved succesfully",
-        data: {
-          projects,
-        },
-      }),
-    );
-  } catch (error) {
-    if (error instanceof AppError) {
-      return next(error);
-    }
-
-    return next(
-      new AppError(ErrorCode.INTERNAL_SERVER_ERROR, "Something went wrong"),
-    );
-  }
-};
-
-export const getProjectByIdController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
-    const project = await getProject(
+    const tasks = await getTasksByProject(
       req.params.projectId as string,
       req.user.id,
     );
@@ -93,8 +64,8 @@ export const getProjectByIdController = async (
     return res.status(HttpStatus.OK).json(
       new ApiResponse({
         statusCode: HttpStatus.OK,
-        message: "Project retrieved successfully",
-        data: { project },
+        message: "Tasks retrieved successfully",
+        data: { tasks },
       }),
     );
   } catch (error) {
@@ -108,23 +79,19 @@ export const getProjectByIdController = async (
   }
 };
 
-export const updateProjectByIdController = async (
+export const getTaskByIdController = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   try {
-    const project = await updateProject(
-      req.params.projectId as string,
-      req.user.id,
-      req.body,
-    );
+    const task = await getTask(req.params.taskId as string, req.user.id);
 
     return res.status(HttpStatus.OK).json(
       new ApiResponse({
         statusCode: HttpStatus.OK,
-        message: "Project updated successfully",
-        data: { project },
+        message: "Task retrieved successfully",
+        data: { task },
       }),
     );
   } catch (error) {
@@ -138,18 +105,58 @@ export const updateProjectByIdController = async (
   }
 };
 
-export const deleteProjectByIdController = async (
+export const updateTaskController = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   try {
-    await deleteProject(req.params.projectId as string, req.user.id);
+    const userId = req.user.id;
+    const taskId = req.params.taskId as string;
+    const { name, status, startDate, endDate, assigneeId, parentTaskId } =
+      req.body;
+
+    const task = await updateTask(taskId, userId, {
+      name,
+      status,
+      startDate,
+      endDate,
+      assigneeId,
+      parentTaskId,
+    });
 
     return res.status(HttpStatus.OK).json(
       new ApiResponse({
         statusCode: HttpStatus.OK,
-        message: "Project deleted successfully",
+        message: "Task updated successfully",
+        data: { task },
+      }),
+    );
+  } catch (error) {
+    if (error instanceof AppError) {
+      return next(error);
+    }
+
+    return next(
+      new AppError(ErrorCode.INTERNAL_SERVER_ERROR, "Something went wrong"),
+    );
+  }
+};
+
+export const deleteTaskController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const userId = req.user.id;
+    const taskId = req.params.taskId as string;
+    await deleteTask(taskId, userId);
+
+    return res.status(HttpStatus.OK).json(
+      new ApiResponse({
+        statusCode: HttpStatus.OK,
+        message: "Task deleted successfully",
       }),
     );
   } catch (error) {

@@ -6,6 +6,11 @@ import {
   getProjectByIdController,
   updateProjectByIdController,
 } from "./projects.controller.js";
+import {
+  createTaskController,
+  getTasksByProjectController,
+} from "../tasks/tasks.controller.js";
+import { validateCreateTask } from "../tasks/tasks.validation.js";
 
 const router = Router();
 
@@ -21,6 +26,19 @@ router.delete(
   "/:projectId",
   validateProjectIdParam,
   deleteProjectByIdController,
+);
+
+// Tasks route scoped to team
+router.post(
+  "/:projectId/tasks",
+  validateProjectIdParam,
+  validateCreateTask,
+  createTaskController,
+);
+router.get(
+  "/:projectId/tasks",
+  validateProjectIdParam,
+  getTasksByProjectController,
 );
 
 export default router;
