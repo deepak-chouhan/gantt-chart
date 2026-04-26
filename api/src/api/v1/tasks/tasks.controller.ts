@@ -9,6 +9,7 @@ import {
 } from "./tasks.service.js";
 import AppError from "../../../utils/appError.js";
 import ApiResponse from "../../../utils/apiResponse.js";
+import { publishEvent } from "../../../sse/sse.service.js";
 
 export const createTaskController = async (
   req: Request,
@@ -31,6 +32,8 @@ export const createTaskController = async (
       parentTaskId ?? null,
       userId,
     );
+
+    await publishEvent(task.projectId, "task:created", { task });
 
     return res.status(HttpStatus.CREATED).json(
       new ApiResponse({
@@ -124,6 +127,12 @@ export const updateTaskController = async (
       assigneeId,
       parentTaskId,
     });
+
+    if (!task) {
+      return;
+    }
+
+    await publishEvent(task.projectId, "task:updated", { task });
 
     return res.status(HttpStatus.OK).json(
       new ApiResponse({
