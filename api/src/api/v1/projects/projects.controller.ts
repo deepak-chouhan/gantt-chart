@@ -9,6 +9,7 @@ import {
 import { ErrorCode, HttpStatus } from "../../../types/error.types.js";
 import ApiResponse from "../../../utils/apiResponse.js";
 import AppError from "../../../utils/appError.js";
+import { publishEvent } from "../../../sse/sse.service.js";
 
 export const createProjectController = async (
   req: Request,
@@ -119,6 +120,8 @@ export const updateProjectByIdController = async (
       req.user.id,
       req.body,
     );
+
+    await publishEvent(project.id, "project:updated", { project });
 
     return res.status(HttpStatus.OK).json(
       new ApiResponse({

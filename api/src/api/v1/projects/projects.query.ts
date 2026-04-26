@@ -70,7 +70,7 @@ export const updateProjectQuery = async (
   fields: Partial<
     Pick<IProject, "name" | "description" | "statDate" | "endDate">
   >,
-): Promise<IProject | null> => {
+): Promise<IProject> => {
   const updates: string[] = [];
   const values: unknown[] = [];
 
@@ -108,7 +108,7 @@ export const updateProjectQuery = async (
     values,
   );
 
-  return rows[0] ? toCamelCaseKeys<IProject>(rows[0]) : null;
+  return toCamelCaseKeys<IProject>(rows[0]);
 };
 
 export const deleteProjectQuery = async (projectId: string) => {

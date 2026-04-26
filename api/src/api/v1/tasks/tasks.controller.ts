@@ -128,10 +128,6 @@ export const updateTaskController = async (
       parentTaskId,
     });
 
-    if (!task) {
-      return;
-    }
-
     await publishEvent(task.projectId, "task:updated", { task });
 
     return res.status(HttpStatus.OK).json(
@@ -160,7 +156,9 @@ export const deleteTaskController = async (
   try {
     const userId = req.user.id;
     const taskId = req.params.taskId as string;
-    await deleteTask(taskId, userId);
+    const task = await deleteTask(taskId, userId);
+
+    await publishEvent(task.projectId, "task:deleted", { taskId: task.id });
 
     return res.status(HttpStatus.OK).json(
       new ApiResponse({

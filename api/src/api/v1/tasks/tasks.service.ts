@@ -108,4 +108,5 @@ export const deleteTask = async (taskId: string, userId: string) => {
   await assertTeamMember(project.teamId, userId);
 
   await deleteTaskQuery(taskId);
+  return task
 };
