@@ -4,6 +4,7 @@ import teamsRouter from "./teams/teams.routes.js";
 import projectsRouter from "./projects/projects.route.js";
 import tasksRouter from "./tasks/tasks.routes.js";
 import sseRouter from "./sse/sse.routes.js";
+import jobsRouter from "./jobs/jobs.routes.js";
 
 const V1Router = Router();
 
@@ -12,5 +13,6 @@ V1Router.use("/teams", teamsRouter);
 V1Router.use("/projects", projectsRouter);
 V1Router.use("/tasks", tasksRouter);
 V1Router.use("/sse", sseRouter);
+V1Router.use("/jobs", jobsRouter);
 
 export default V1Router;

@@ -15,6 +15,8 @@ const requiredVars = [
   "INVITE_BASE_URL",
   "INVITE_EMAIL",
   "REDIS_URL",
+  "AWS_ACCESS_KEY_ID",
+  "AWS_SECRET_ACCESS_KEY",
 ];
 
 requiredVars.forEach((key) => {
@@ -45,4 +47,8 @@ export const env = {
     email: String(process.env.INVITE_EMAIL),
   },
   redisUrl: String(process.env.REDIS_URL),
+  aws: {
+    accessKeyId: String(process.env.AWS_ACCESS_KEY_ID),
+    secretAccessKey: String(process.env.AWS_SECRET_ACCESS_KEY)
+  }
 };
