@@ -133,7 +133,7 @@ export const updateTaskQuery = async (
     values,
   );
 
-  return rows[0] ? toCamelCaseKeys<ITask>(rows[0]) : null;
+  return toCamelCaseKeys<ITask>(rows[0]);
 };
 
 export const deleteTaskQuery = async (taskId: string) => {

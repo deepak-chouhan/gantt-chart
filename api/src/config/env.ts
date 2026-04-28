@@ -14,6 +14,7 @@ const requiredVars = [
   "RESEND_API_KEY",
   "INVITE_BASE_URL",
   "INVITE_EMAIL",
+  "REDIS_URL",
 ];
 
 requiredVars.forEach((key) => {
@@ -43,4 +44,5 @@ export const env = {
     baseUrl: String(process.env.INVITE_BASE_URL),
     email: String(process.env.INVITE_EMAIL),
   },
+  redisUrl: String(process.env.REDIS_URL),
 };

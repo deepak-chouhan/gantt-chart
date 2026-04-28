@@ -9,6 +9,7 @@ import {
 } from "./tasks.service.js";
 import AppError from "../../../utils/appError.js";
 import ApiResponse from "../../../utils/apiResponse.js";
+import { publishEvent } from "../../../sse/sse.service.js";
 
 export const createTaskController = async (
   req: Request,
@@ -31,6 +32,8 @@ export const createTaskController = async (
       parentTaskId ?? null,
       userId,
     );
+
+    await publishEvent(task.projectId, "task:created", { task });
 
     return res.status(HttpStatus.CREATED).json(
       new ApiResponse({
@@ -125,6 +128,8 @@ export const updateTaskController = async (
       parentTaskId,
     });
 
+    await publishEvent(task.projectId, "task:updated", { task });
+
     return res.status(HttpStatus.OK).json(
       new ApiResponse({
         statusCode: HttpStatus.OK,
@@ -151,7 +156,9 @@ export const deleteTaskController = async (
   try {
     const userId = req.user.id;
     const taskId = req.params.taskId as string;
-    await deleteTask(taskId, userId);
+    const task = await deleteTask(taskId, userId);
+
+    await publishEvent(task.projectId, "task:deleted", { taskId: task.id });
 
     return res.status(HttpStatus.OK).json(
       new ApiResponse({
