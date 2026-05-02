@@ -1,7 +1,7 @@
 export type JobStatus = "NOT_STARTED" | "IN_PROGRESS" | "COMPLETED" | "FAILED";
 export type JobType = "CSV_IMPORT" | "CSV_EXPORT";
 
-export interface Job {
+export interface IJob {
   id: string;
   name: string;
   type: JobType;

@@ -6,6 +6,7 @@ import {
   exportController,
   getJobController,
   importController,
+  upload,
 } from "./jobs.controller.js";
 
 const router = Router();
@@ -19,6 +20,7 @@ router.post(
 router.post(
   "/projects/:projectId/import",
   validateProjectIdParam,
+  upload.single("file"),
   importController,
 );
 

@@ -17,6 +17,7 @@ const requiredVars = [
   "REDIS_URL",
   "AWS_ACCESS_KEY_ID",
   "AWS_SECRET_ACCESS_KEY",
+  "BUCKET_NAME",
 ];
 
 requiredVars.forEach((key) => {
@@ -49,6 +50,7 @@ export const env = {
   redisUrl: String(process.env.REDIS_URL),
   aws: {
     accessKeyId: String(process.env.AWS_ACCESS_KEY_ID),
-    secretAccessKey: String(process.env.AWS_SECRET_ACCESS_KEY)
-  }
+    secretAccessKey: String(process.env.AWS_SECRET_ACCESS_KEY),
+    bucketName: String(process.env.BUCKET_NAME),
+  },
 };
